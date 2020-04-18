@@ -1,0 +1,21 @@
+{
+  "name": "marblet",
+  "version": "1.0.0",
+  "description": "A helper tool to test rxjs6",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "repository": "https://github.com/ryuheechul/marblet",
+  "author": "Heechul Ryu",
+  "license": "MIT",
+  "scripts": {
+    "test": "jest",
+    "prepublishOnly": "yarn test"
+  },
+  "keywords": [
+    "rxjs6"
+  ],
+  "devDependencies": {
+    "jest": "^25.3.0",
+    "rxjs": "^6.5.5"
+  }
+}
