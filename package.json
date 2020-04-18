@@ -12,7 +12,9 @@
     "prepublishOnly": "yarn test"
   },
   "keywords": [
-    "rxjs6"
+    "rxjs",
+    "rxjs6",
+    "testing"
   ],
   "devDependencies": {
     "jest": "^25.3.0",
