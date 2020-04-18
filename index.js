@@ -1,6 +1,4 @@
 const { TestScheduler } = require("rxjs/testing");
-const { Observable } = require("rxjs");
-const { filter, map, scan } = require("rxjs/operators");
 
 const simpleRunner = (
   { cold, expectObservable },
