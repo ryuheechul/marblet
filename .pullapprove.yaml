@@ -1,0 +1,8 @@
+version: 3
+overrides:
+- if: >-
+    author == "dependabot[bot]"
+    and
+    'dependencies' in labels
+  status: success
+  explanation: "auto approve PRs from dependantbot"
