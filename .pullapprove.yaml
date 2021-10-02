@@ -6,3 +6,7 @@ overrides:
     'dependencies' in labels
   status: success
   explanation: "auto approve PRs from dependantbot"
+groups:
+  general-review:
+    reviewers:
+      users: [ryuheechul]
