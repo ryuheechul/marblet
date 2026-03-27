@@ -1,0 +1,87 @@
+name: Bump Version
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+    inputs:
+      bump:
+        description: 'Bump type (auto uses semantic-release to detect from commits)'
+        required: false
+        type: choice
+        default: auto
+        options: [auto, patch, minor, major]
+
+jobs:
+  bump:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: pnpm install --frozen-lockfile
+
+      - name: Skip if this is a release commit
+        id: guard
+        run: |
+          # bump PRs include [skip bump] in the title/commit to signal this workflow should not create another PR
+          # for squash/rebase merges it appears in the commit subject; for regular merges GitHub puts the PR title in the commit body
+          COMMIT=$(git log -1 --format="%B")
+          if [[ "$COMMIT" =~ \[skip\ bump\] ]]; then
+            echo "skip=true" >> $GITHUB_OUTPUT
+          else
+            echo "skip=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Determine and apply next version to package.json
+        id: next
+        if: steps.guard.outputs.skip != 'true'
+        run: |
+          BUMP="${{ inputs.bump }}"
+          if [ -z "$BUMP" ] || [ "$BUMP" = "auto" ]; then
+            # use semantic-release programmatic API to cleanly get the next version
+            VERSION=$(node -e "
+              require('semantic-release').default(
+                { dryRun: true, ci: false },
+                { stdout: process.stderr, stderr: process.stderr }
+              ).then(r => process.stdout.write(r ? r.nextRelease.version : ''))
+               .catch(() => {});
+            ")
+            if [ -n "$VERSION" ]; then
+              npm version "$VERSION" --no-git-tag-version
+            fi
+          else
+            npm version "$BUMP" --no-git-tag-version
+            VERSION=$(node -p "require('./package.json').version")
+          fi
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create bump PR
+        if: steps.guard.outputs.skip != 'true' && steps.next.outputs.version != ''
+        run: |
+          VERSION="v${{ steps.next.outputs.version }}"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          BRANCH="release/$VERSION"
+          git checkout -b "$BRANCH"
+          git add package.json
+          # --allow-empty handles the edge case of re-running after version is already bumped
+          # [skip bump] prevents bump.yml from re-triggering when this branch is merged to master
+          git commit --allow-empty -m "chore: release $VERSION [skip bump]"
+          git push origin "$BRANCH"
+          gh pr create \
+            --title "chore: release $VERSION [skip bump]" \
+            --body "Automated version bump to $VERSION" \
+            --base master \
+            --head "$BRANCH"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

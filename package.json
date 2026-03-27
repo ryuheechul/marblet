@@ -40,6 +40,7 @@
     "typescript": "latest",
     "tsup": "latest",
     "vitest": "latest",
-    "rxjs": "^7.0.0"
+    "rxjs": "^7.0.0",
+    "semantic-release": "latest"
   }
 }

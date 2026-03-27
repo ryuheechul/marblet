@@ -5,7 +5,7 @@ overrides:
     and
     'dependencies' in labels
   status: success
-  explanation: "auto approve PRs from dependantbot"
+  explanation: "auto approve PRs from dependabot"
 groups:
   general-review:
     reviewers:

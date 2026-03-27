@@ -1,0 +1,32 @@
+name: Create Release
+
+on:
+  pull_request:
+    types: [closed]
+    branches: [master]
+
+jobs:
+  release:
+    # only run when a bump PR is merged (not any PR)
+    if: "github.event.pull_request.merged == true && startsWith(github.event.pull_request.title, 'chore: release v')"
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: pnpm install --frozen-lockfile
+      - name: Release
+        # semantic-release: analyzes commits, creates git tag and GitHub release
+        # does not modify package.json — the bump PR already handled that
+        # the GitHub release event then triggers publish-npm in npm-publish.yml
+        run: npx semantic-release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
