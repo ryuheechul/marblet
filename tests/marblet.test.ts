@@ -1,5 +1,10 @@
-import { Observable } from "rxjs";
-import { filter, map } from "rxjs/operators";
+// Examples and tests for marblet.
+// Originally written against RxJS 6; now runs on RxJS 7.
+//
+// RxJS 6: import { filter, map } from 'rxjs/operators';
+// RxJS 7: import { filter, map } from 'rxjs';          (unified; 'rxjs/operators' still works as a compat shim)
+
+import { Observable, filter, map } from "rxjs";
 import { marblet, expectUpstream } from "../index";
 
 const operators = {
@@ -14,7 +19,9 @@ const operators = {
 describe("Scheduler examples", () => {
   const { identity, evenTimesTen } = operators;
 
-  const withJest = (actual: unknown, expected: unknown) =>
+  // assess() takes any function matching (actual, expected) => void,
+  // so it works with Vitest, Jest, or any other assertion library.
+  const assertDeepEqual = (actual: unknown, expected: unknown) =>
     expect(actual).toEqual(expected);
 
   test("simple", () => {
@@ -30,7 +37,7 @@ describe("Scheduler examples", () => {
           a: 1,
           b: 2,
         })
-    ).assess(withJest);
+    ).assess(assertDeepEqual);
   });
 
   test("simple with array up", () => {
@@ -41,7 +48,7 @@ describe("Scheduler examples", () => {
         a: 1,
         b: 2,
       })
-    ).assess(withJest);
+    ).assess(assertDeepEqual);
   });
 
   test("simple with array down", () => {
@@ -54,7 +61,7 @@ describe("Scheduler examples", () => {
       })
         .pipe(identity)
         .toBe([1, 2])
-    ).assess(withJest);
+    ).assess(assertDeepEqual);
   });
 
   test("simple with all array", () => {
@@ -62,7 +69,7 @@ describe("Scheduler examples", () => {
       "0-1|",
       "0-1|",
       expectUpstream([1, 2]).pipe(identity).toBe([1, 2])
-    ).assess(withJest);
+    ).assess(assertDeepEqual);
   });
 
   test("should filter out odd numbers and multiply them by ten", () => {
@@ -83,6 +90,6 @@ describe("Scheduler examples", () => {
       })
         .pipe(evenTimesTen)
         .toBe({ b: 20, d: 40, f: 60, h: 80, j: 100 })
-    ).assess(withJest);
+    ).assess(assertDeepEqual);
   });
 });

@@ -1,7 +1,13 @@
-import { TestScheduler } from "rxjs/testing";
+// marblet — a thin wrapper around RxJS TestScheduler for marble testing.
+// Originally written to simplify testing with RxJS 6; now supports RxJS 6 and 7.
+// The core TestScheduler API (run, cold, expectObservable) is unchanged between versions.
 
-type RunHelpers = Parameters<Parameters<TestScheduler["run"]>[0]>[0];
+import { TestScheduler } from "rxjs/testing";
 import { Observable } from "rxjs";
+
+// Derive RunHelpers from TestScheduler rather than importing it directly,
+// since it is not exported from rxjs/testing in RxJS 6.
+type RunHelpers = Parameters<Parameters<TestScheduler["run"]>[0]>[0];
 
 type MarbleValues = Record<string, unknown> | unknown[];
 
