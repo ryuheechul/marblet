@@ -30,6 +30,38 @@ deno add --dev npm:marblet
 
 ## How to use
 
-Checkout [tests](./tests). It's both tests and examples.
+### Without marblet
 
-I used [Vitest](https://vitest.dev/) for testing in there but it should have no problems being used with any testing framework.
+Testing an operator with raw `TestScheduler` requires repetitive scaffolding:
+
+```ts
+new TestScheduler((actual, expected) => expect(actual).toEqual(expected))
+  .run(({ cold, expectObservable }) => {
+    const source$ = cold('a-b-c-d|', { a: 1, b: 2, c: 3, d: 4 });
+    const result$ = source$.pipe(
+      filter(n => n % 2 === 0),
+      map(n => n * 2)
+    );
+    expectObservable(result$).toBe('--b---d|', { b: 4, d: 8 });
+  });
+```
+
+### With marblet
+
+marblet collapses that into a declarative unit — input marble, output marble, and the operator under test together:
+
+```ts
+import { marblet, expectUpstream } from 'marblet';
+
+marblet(
+  'a-b-c-d|',
+  '--b---d|',
+  expectUpstream({ a: 1, b: 2, c: 3, d: 4 })
+    .pipe(source$ => source$.pipe(filter(n => n % 2 === 0), map(n => n * 2)))
+    .toBe({ b: 4, d: 8 })
+).assess((actual, expected) => expect(actual).toEqual(expected));
+```
+
+`assess()` accepts any `(actual, expected) => void` function, so it should work with Vitest, Jest, or any other assertion library.
+
+For more examples see [tests](./tests).
