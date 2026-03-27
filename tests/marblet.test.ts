@@ -5,7 +5,7 @@
 // RxJS 7: import { filter, map } from 'rxjs';          (unified; 'rxjs/operators' still works as a compat shim)
 
 import { Observable, filter, map } from "rxjs";
-import { marblet, expectUpstream } from "../index";
+import { marblet, expectUpstream } from "marblet";
 
 const operators = {
   identity: (source$: Observable<unknown>) => source$.pipe(map((n) => n)),

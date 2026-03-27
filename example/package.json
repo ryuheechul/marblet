@@ -1,0 +1,12 @@
+{
+  "name": "marblet-example",
+  "private": true,
+  "scripts": {
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "marblet": "workspace:*",
+    "rxjs": "^7.0.0",
+    "vitest": "latest"
+  }
+}

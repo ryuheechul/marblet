@@ -17,6 +17,23 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm test
 
+  test-dist:
+    # The 'build' job tests source via vitest, but Vite resolves workspace
+    # packages directly to their TypeScript source — bypassing "main" entirely.
+    # This job catches what vitest cannot: a broken "main" pointer or missing
+    # dist/ in the published package. Node's CJS resolver strictly follows
+    # "main" with no fallbacks.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+      - run: node -e "const m = require('.'); if (!m.marblet || !m.expectUpstream) process.exit(1)"
+
   publish-npm:
     needs: build
     if: github.event_name == 'release'

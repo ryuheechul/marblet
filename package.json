@@ -8,6 +8,10 @@
   "author": "Heechul Ryu",
   "license": "MIT",
   "packageManager": "pnpm@10.30.3",
+  "files": [
+    "dist",
+    "tests"
+  ],
   "scripts": {
     "build": "tsup index.ts --format cjs --dts --clean --external rxjs",
     "test": "vitest run",
@@ -32,6 +36,7 @@
     }
   },
   "devDependencies": {
+    "marblet": "workspace:*",
     "typescript": "latest",
     "tsup": "latest",
     "vitest": "latest",

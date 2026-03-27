@@ -11,7 +11,22 @@ And I made [this gist](https://gist.github.com/ryuheechul/65e4b573167d6b93158597
 
 ## Install
 
-`$ pnpm add --save-dev marblet`
+```sh
+# npm
+npm install --save-dev marblet
+
+# yarn
+yarn add --dev marblet
+
+# pnpm
+pnpm add --save-dev marblet
+
+# bun
+bun add --dev marblet
+
+# deno
+deno add --dev npm:marblet
+```
 
 ## How to use
 
