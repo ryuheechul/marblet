@@ -8,8 +8,8 @@
   "author": "Heechul Ryu",
   "license": "MIT",
   "scripts": {
-    "test": "jest",
-    "prepublishOnly": "yarn test"
+    "test": "vitest run",
+    "prepublishOnly": "pnpm test"
   },
   "keywords": [
     "rxjs",
@@ -17,7 +17,7 @@
     "testing"
   ],
   "devDependencies": {
-    "jest": "^27.2.1",
+    "vitest": "latest",
     "rxjs": "^6.6.7"
   }
 }

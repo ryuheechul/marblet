@@ -1,7 +1,7 @@
 .PHONY: test
 test: install
-	yarn test
+	pnpm test
 
 .PHONY: install
 install:
-	yarn
+	pnpm install
