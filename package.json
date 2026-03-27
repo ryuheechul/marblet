@@ -8,15 +8,27 @@
   "author": "Heechul Ryu",
   "license": "MIT",
   "scripts": {
+    "build": "tsup index.ts --format cjs --dts --clean --external rxjs",
     "test": "vitest run",
-    "prepublishOnly": "pnpm test"
+    "prepublishOnly": "pnpm build && pnpm test"
   },
   "keywords": [
     "rxjs",
     "rxjs6",
     "testing"
   ],
+  "peerDependencies": {
+    "rxjs": "^6.6.7"
+  },
+  "pnpm": {
+    "trustedDependencies": ["esbuild"],
+    "overrides": {
+      "@tootallnate/once": ">=3.0.1"
+    }
+  },
   "devDependencies": {
+    "typescript": "latest",
+    "tsup": "latest",
     "vitest": "latest",
     "rxjs": "^6.6.7"
   }

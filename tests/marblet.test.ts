@@ -1,20 +1,21 @@
-const { Observable } = require("rxjs");
-const { filter, map } = require("rxjs/operators");
-const { marblet, expectUpstream } = require("../index.js");
+import { Observable } from "rxjs";
+import { filter, map } from "rxjs/operators";
+import { marblet, expectUpstream } from "../index";
 
 const operators = {
-  identity: (source$) => source$.pipe(map((n) => n)),
-  evenTimesTen: (source$) =>
+  identity: (source$: Observable<unknown>) => source$.pipe(map((n) => n)),
+  evenTimesTen: (source$: Observable<unknown>) =>
     source$.pipe(
-      filter((n) => n % 2 === 0),
-      map((n) => n * 10)
+      filter((n) => (n as number) % 2 === 0),
+      map((n) => (n as number) * 10)
     ),
 };
 
 describe("Scheduler examples", () => {
   const { identity, evenTimesTen } = operators;
 
-  const withJest = (actual, expected) => expect(actual).toEqual(expected);
+  const withJest = (actual: unknown, expected: unknown) =>
+    expect(actual).toEqual(expected);
 
   test("simple", () => {
     marblet(
