@@ -1,6 +1,6 @@
 {
   "name": "marblet",
-  "version": "1.0.3",
+  "version": "2.0.0",
   "description": "A helper tool for marble testing with RxJS",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -24,7 +24,9 @@
     "rxjs": "^6.6.7 || ^7.0.0"
   },
   "pnpm": {
-    "trustedDependencies": ["esbuild"],
+    "trustedDependencies": [
+      "esbuild"
+    ],
     "overrides": {
       "@tootallnate/once": ">=3.0.1"
     }
