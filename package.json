@@ -16,7 +16,10 @@
       }
     }
   },
-  "repository": "https://github.com/ryuheechul/marblet",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ryuheechul/marblet.git"
+  },
   "author": "Heechul Ryu",
   "license": "MIT",
   "packageManager": "pnpm@10.30.3",
