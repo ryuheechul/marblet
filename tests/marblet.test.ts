@@ -3,6 +3,10 @@
 //
 // RxJS 6: import { filter, map } from 'rxjs/operators';
 // RxJS 7: import { filter, map } from 'rxjs';          (unified; 'rxjs/operators' still works as a compat shim)
+//
+// Design note: imports resolve through the exports map to built dist/ (not TS
+// source), so a broken "exports"/"main" or missing dist/ fails here. `pnpm test`
+// builds first; CI and the Makefile rely on it.
 
 import { Observable, filter, map } from "rxjs";
 import { marblet, expectUpstream } from "marblet";

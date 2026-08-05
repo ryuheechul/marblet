@@ -26,8 +26,8 @@
   ],
   "scripts": {
     "build": "tsdown",
-    "test": "vitest run",
-    "prepublishOnly": "pnpm build && pnpm test"
+    "test": "pnpm build && vitest run",
+    "prepublishOnly": "pnpm test"
   },
   "keywords": [
     "rxjs",
