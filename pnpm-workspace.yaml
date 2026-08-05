@@ -1,2 +1,9 @@
 packages:
   - example
+
+overrides:
+  '@tootallnate/once': '>=3.0.1'
+  esbuild: '^0.28.1'
+
+onlyBuiltDependencies:
+  - esbuild

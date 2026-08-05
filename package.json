@@ -27,20 +27,12 @@
   "peerDependencies": {
     "rxjs": "^6.6.7 || ^7.0.0"
   },
-  "pnpm": {
-    "trustedDependencies": [
-      "esbuild"
-    ],
-    "overrides": {
-      "@tootallnate/once": ">=3.0.1"
-    }
-  },
   "devDependencies": {
     "marblet": "workspace:*",
-    "typescript": "latest",
+    "typescript": "^6.0.3",
     "tsup": "latest",
     "vitest": "latest",
-    "rxjs": "^7.0.0",
+    "rxjs": "^7.8.2",
     "semantic-release": "latest"
   }
 }
