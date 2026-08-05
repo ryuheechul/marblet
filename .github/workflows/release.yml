@@ -1,14 +1,11 @@
 name: Create Release
 
 on:
-  pull_request:
-    types: [closed]
+  push:
     branches: [master]
 
 jobs:
   release:
-    # only run when a bump PR is merged (not any PR)
-    if: "github.event.pull_request.merged == true && startsWith(github.event.pull_request.title, 'chore: release v')"
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -23,10 +20,24 @@ jobs:
         with:
           node-version: 24
       - run: pnpm install --frozen-lockfile
+
+      - name: Gate on release commit
+        id: gate
+        run: |
+          # bump PRs merge with "chore: release vX.Y.Z [skip bump]" as the subject
+          # (squash) or in the merge commit body (regular merge), same signal bump.yml uses
+          COMMIT=$(git log -1 --format="%B")
+          if [[ "$COMMIT" == *"chore: release v"* ]]; then
+            echo "release=true" >> $GITHUB_OUTPUT
+          else
+            echo "release=false" >> $GITHUB_OUTPUT
+          fi
+
       - name: Release
-        # semantic-release: analyzes commits, creates git tag and GitHub release
-        # does not modify package.json — the bump PR already handled that
+        # semantic-release must run on a push event: a pull_request event makes it skip publishing
+        # creates the git tag and GitHub release; package.json is already bumped by the bump PR
         # the GitHub release event then triggers publish-npm in npm-publish.yml
+        if: steps.gate.outputs.release == 'true'
         run: npx semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
