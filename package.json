@@ -2,8 +2,20 @@
   "name": "marblet",
   "version": "2.0.0",
   "description": "A helper tool for marble testing with RxJS",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "dist/index.cjs",
+  "types": "dist/index.d.cts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.mts",
+        "default": "./dist/index.mjs"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    }
+  },
   "repository": "https://github.com/ryuheechul/marblet",
   "author": "Heechul Ryu",
   "license": "MIT",
@@ -13,7 +25,7 @@
     "tests"
   ],
   "scripts": {
-    "build": "tsup index.ts --format cjs --dts --clean --external rxjs",
+    "build": "tsdown",
     "test": "vitest run",
     "prepublishOnly": "pnpm build && pnpm test"
   },
@@ -29,10 +41,10 @@
   },
   "devDependencies": {
     "marblet": "workspace:*",
-    "typescript": "^6.0.3",
-    "tsup": "latest",
-    "vitest": "latest",
     "rxjs": "^7.8.2",
-    "semantic-release": "latest"
+    "semantic-release": "latest",
+    "tsdown": "^0.22.14",
+    "typescript": "^6.0.3",
+    "vitest": "latest"
   }
 }
